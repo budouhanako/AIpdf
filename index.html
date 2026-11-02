@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>一括アップロード</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="一括アップロード画面">
+      <section class="upload-modal" aria-labelledby="modal-title">
+        <header class="modal-header">
+          <h1 id="modal-title">一括アップロード</h1>
+          <button class="close-button" type="button" aria-label="閉じる">
+            <svg viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M1 1 13 13M13 1 1 13" />
+            </svg>
+          </button>
+        </header>
+
+        <div class="modal-content">
+          <section class="quick-entry" aria-label="会計年度・伝票番号">
+            <div class="quick-row quick-row--year">
+              <label class="quick-label" for="fiscal-year">会計年度：</label>
+              <div class="select-wrap">
+                <select id="fiscal-year">
+                  <option selected>2026年度</option>
+                  <option>2025年度</option>
+                  <option>2024年度</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 12 7" aria-hidden="true">
+                  <path d="m1 1 5 5 5-5" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="quick-row quick-row--slip">
+              <label class="quick-label" for="slip-number">伝票番号：</label>
+              <input id="slip-number" class="text-input slip-input" type="text" />
+              <button class="primary-button slip-search-button" type="button">
+                伝票検索
+              </button>
+              <button class="info-button slip-info" type="button" aria-label="伝票番号について">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7.7" />
+                  <path d="M9 7.5v4.7" />
+                  <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                </svg>
+              </button>
+            </div>
+          </section>
+
+          <section class="file-panel" aria-label="添付ファイル">
+            <div class="file-panel-label">添付ファイル：</div>
+            <div class="file-picker-shell">
+              <div id="selected-files" class="selected-files" hidden></div>
+              <div id="drop-zone" class="drop-zone" role="button" tabindex="0">
+                <div class="drop-zone-copy">
+                  <div>アップロードするファイルをここにドラッグ＆ドロップ。</div>
+                  <div>または、ここをクリックしてファイルを選択してください。</div>
+                </div>
+                <input id="file-input" type="file" multiple hidden />
+              </div>
+            </div>
+            <button class="info-button file-info" type="button" aria-label="添付ファイルについて">
+              <svg viewBox="0 0 18 18" aria-hidden="true">
+                <circle cx="9" cy="9" r="7.7" />
+                <path d="M9 7.5v4.7" />
+                <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+              </svg>
+            </button>
+
+            <div class="file-meta-row">
+              <div id="file-count" class="file-count">（0個のファイルを選択）</div>
+              <div class="ai-ocr-control">
+                <input id="ai-ocr" type="checkbox" checked />
+                <label for="ai-ocr">AI-OCR</label>
+                <button class="info-button ai-ocr-info" type="button" aria-label="AI-OCRについて">
+                  <svg viewBox="0 0 18 18" aria-hidden="true">
+                    <circle cx="9" cy="9" r="7.7" />
+                    <path d="M9 7.5v4.7" />
+                    <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <section class="split-section">
+              <button class="split-section-header" type="button" aria-expanded="true">
+                <span class="split-section-title">AI請求書・領収書分割</span>
+                <span class="split-section-status">5件に分割済み</span>
+                <svg viewBox="0 0 12 7" aria-hidden="true">
+                  <path d="m1 1 5 5 5-5" />
+                </svg>
+              </button>
+
+              <div class="split-section-body">
+                <div class="split-field-row split-field-row--mode">
+                  <span class="split-field-label">分割設定</span>
+                  <div class="split-radio-group" role="radiogroup" aria-label="分割設定">
+                    <label class="split-radio-option">
+                      <input type="radio" name="split-upload-mode" value="off" />
+                      <span class="radio-mark"></span>
+                      <span>分割しない</span>
+                    </label>
+                    <label class="split-radio-option">
+                      <input type="radio" name="split-upload-mode" value="on" checked />
+                      <span class="radio-mark"></span>
+                      <span>分割する</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="split-field-row">
+                  <span class="split-field-label">ファイル名</span>
+                  <span class="split-filename">
+                    mescius_取引日_取引先名_金額.pdf
+                  </span>
+                  <button id="split-settings-button" class="text-action-button" type="button">
+                    変更
+                  </button>
+                </div>
+
+                <div class="split-field-row split-field-row--result">
+                  <span class="split-field-label">状態</span>
+                  <span class="split-result-message">5件に分割しました</span>
+                  <button id="split-preview-button" class="outline-blue-button" type="button" disabled>
+                    結果を確認
+                  </button>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <section class="metadata-panel" aria-label="一括登録情報">
+            <p class="metadata-guidance">
+              <span>添付ファイルをアップロードする際に、一括登録したい情報のみ指定してください。</span>
+              <span>後から個別に登録する事も可能です。</span>
+            </p>
+
+            <div class="radio-row radio-row--category">
+              <div class="metadata-label">区分：</div>
+              <label class="radio-option radio-option--disabled">
+                <input type="radio" name="category" disabled />
+                <span class="radio-mark"></span>
+                <span>スキャナ保存</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="category" />
+                <span class="radio-mark"></span>
+                <span>電子取引</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="category" checked />
+                <span class="radio-mark"></span>
+                <span>その他</span>
+              </label>
+              <button class="info-button metadata-info" type="button" aria-label="区分について">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7.7" />
+                  <path d="M9 7.5v4.7" />
+                  <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="radio-row radio-row--document">
+              <div class="metadata-label">書類区分：</div>
+              <label class="radio-option">
+                <input type="radio" name="document-type" />
+                <span class="radio-mark"></span>
+                <span>重要書類</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="document-type" />
+                <span class="radio-mark"></span>
+                <span>一般書類</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="document-type" checked />
+                <span class="radio-mark"></span>
+                <span>過去の重要書類</span>
+              </label>
+              <button class="info-button metadata-info" type="button" aria-label="書類区分について">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7.7" />
+                  <path d="M9 7.5v4.7" />
+                  <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="metadata-row registration-row">
+              <label class="metadata-label metadata-row-label" for="registration-number">登録番号：</label>
+              <span class="registration-prefix">T</span>
+              <input id="registration-number" class="text-input registration-input" type="text" />
+              <button class="info-button registration-info" type="button" aria-label="登録番号について">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7.7" />
+                  <path d="M9 7.5v4.7" />
+                  <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                </svg>
+              </button>
+              <button class="primary-button registration-button" type="button">
+                登録番号照会
+              </button>
+            </div>
+
+            <div class="metadata-row supplier-row">
+              <label class="metadata-label metadata-row-label" for="supplier">取引先：</label>
+              <input id="supplier" class="text-input supplier-input" type="text" />
+            </div>
+
+            <div class="metadata-row transaction-date-row">
+              <label class="metadata-label metadata-row-label" for="transaction-date">取引日：</label>
+              <div class="date-input">
+                <input id="transaction-date" type="text" value="2026/10/28" />
+                <svg class="calendar-icon" viewBox="0 0 16 18" aria-hidden="true">
+                  <rect x="1.25" y="3.25" width="13.5" height="12.5" rx="1" />
+                  <path d="M1.25 6.75h13.5M4.5 1.5v3.25M11.5 1.5v3.25" />
+                </svg>
+              </div>
+              <button class="info-button date-info" type="button" aria-label="取引日について">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7.7" />
+                  <path d="M9 7.5v4.7" />
+                  <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                </svg>
+              </button>
+              <button class="primary-button reference-button" type="button">
+                参照入力(取引先・登録番号)
+              </button>
+            </div>
+
+            <div class="metadata-row receipt-date-row">
+              <label class="metadata-label metadata-row-label" for="receipt-date">受領日：</label>
+              <div class="date-input">
+                <input id="receipt-date" type="text" value="2026/10/28" />
+                <svg class="calendar-icon" viewBox="0 0 16 18" aria-hidden="true">
+                  <rect x="1.25" y="3.25" width="13.5" height="12.5" rx="1" />
+                  <path d="M1.25 6.75h13.5M4.5 1.5v3.25M11.5 1.5v3.25" />
+                </svg>
+              </div>
+              <button class="info-button receipt-info" type="button" aria-label="受領日について">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7.7" />
+                  <path d="M9 7.5v4.7" />
+                  <circle class="info-dot" cx="9" cy="4.9" r=".9" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="amount-block">
+              <div class="metadata-label amount-label">金額：</div>
+              <div class="amount-row amount-row--one">
+                <span class="amount-index">1、</span>
+                <input class="amount-input" type="text" inputmode="numeric" />
+                <span class="yen">円</span>
+              </div>
+              <label class="tax-split-option">
+                <input id="tax-split" type="checkbox" />
+                <span class="checkbox-mark"></span>
+                <span>税率の異なる金額を分け<br />て入力する</span>
+              </label>
+              <div class="amount-row amount-row--two">
+                <span class="amount-index">2、</span>
+                <input class="amount-input" type="text" inputmode="numeric" disabled />
+                <span class="yen">円</span>
+              </div>
+              <div class="amount-total">
+                <span>合計:</span>
+                <span class="total-yen">円</span>
+              </div>
+            </div>
+
+            <div class="metadata-row note-row">
+              <label class="metadata-label metadata-row-label" for="note">備考：</label>
+              <input id="note" class="text-input note-input" type="text" />
+            </div>
+
+            <div class="metadata-notes">
+              <div>※「区分：スキャナ保存」の一括アップロードはできません。</div>
+              <div class="note-indent">一括アップロードでは、　電子帳簿保存法のスキャナ保存の要件チェックができないため制限しています。</div>
+              <div>「区分：電子取引」で保存する為には、電子帳簿保存法の要件を満たすために、</div>
+              <div>「取引先・取引日・受領日・金額」の入力必須項目としています。</div>
+              <div>（※AI-OCR（ON）の場合は、入力せずにアップロード可能です。）</div>
+            </div>
+          </section>
+        </div>
+
+        <footer class="modal-footer">
+          <button class="upload-button" type="button" disabled>
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" />
+            </svg>
+            <span>一括アップロード</span>
+          </button>
+          <button class="cancel-button" type="button">キャンセル</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分割結果プレビュー</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./preview-result.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="分割結果プレビュー画面">
+      <section class="upload-modal preview-modal" aria-labelledby="preview-title">
+        <header class="modal-header">
+          <h1 id="preview-title">プレビュー</h1>
+          <button id="close-preview" class="close-button" type="button" aria-label="閉じる">
+            <svg viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M1 1 13 13M13 1 1 13" />
+            </svg>
+          </button>
+        </header>
+
+        <div class="preview-content">
+          <section class="source-files" aria-label="元ファイル">
+            <span class="source-files-label">元ファイル</span>
+            <div class="source-file-list" role="tablist" aria-label="元ファイルの選択">
+              <button class="source-file-chip is-active" type="button" role="tab" aria-selected="true">
+                <span>7月請求書一括.pdf</span>
+                <span class="source-file-count">5件</span>
+              </button>
+              <button class="source-file-chip" type="button" role="tab" aria-selected="false">
+                <span>領収書_711.png</span>
+                <span class="source-file-count">1件</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="split-results" aria-label="分割後のファイル">
+            <div class="split-results-header">
+              <div class="split-results-heading">
+                <span>分割後ファイル</span>
+                <span class="result-count">5件</span>
+              </div>
+              <div class="preview-context">
+                <span>選択中</span>
+                <strong>7月請求書一括.pdf</strong>
+              </div>
+              <span class="scroll-hint">横にスクロールして確認できます</span>
+            </div>
+
+            <div class="result-scroller" tabindex="0">
+              <div class="result-track">
+                <article class="result-group">
+                  <div class="result-group-header">
+                    <span class="group-number">1</span>
+                    <input
+                      class="result-filename"
+                      type="text"
+                      value="mescius_20250617_メシウス株式会社_53680.pdf"
+                      aria-label="分割後ファイル名"
+                    />
+                    <span class="group-status group-status--ok">確認済み</span>
+                  </div>
+                  <div class="result-group-meta">
+                    <span>P1</span>
+                    <span>1ページ</span>
+                  </div>
+                  <div class="page-sequence">
+                    <figure class="document-page invoice-page">
+                      <div class="document-title">請 求 書</div>
+                      <div class="document-meta">2025年6月17日</div>
+                      <div class="document-party">メシウス株式会社 御中</div>
+                      <div class="document-line document-line--short"></div>
+                      <div class="document-line"></div>
+                      <div class="document-line"></div>
+                      <div class="document-table">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="document-total">合計 ¥53,680</div>
+                      <span class="page-number">P1</span>
+                    </figure>
+                  </div>
+                </article>
+
+                <button class="boundary-button merge-button" type="button">結合</button>
+
+                <article class="result-group">
+                  <div class="result-group-header">
+                    <span class="group-number">2</span>
+                    <input
+                      class="result-filename"
+                      type="text"
+                      value="mescius_20250725_JR東日本_10670.pdf"
+                      aria-label="分割後ファイル名"
+                    />
+                    <span class="group-status group-status--ok">確認済み</span>
+                  </div>
+                  <div class="result-group-meta">
+                    <span>P2-P3</span>
+                    <span>2ページ</span>
+                  </div>
+                  <div class="page-sequence">
+                    <figure class="document-page receipt-page">
+                      <div class="receipt-head">ご利用票兼領収書</div>
+                      <div class="document-meta">2025年7月25日</div>
+                      <div class="document-party">東日本旅客鉄道株式会社</div>
+                      <div class="document-line"></div>
+                      <div class="document-line"></div>
+                      <div class="receipt-box">
+                        <span>金額</span><strong>¥10,670</strong>
+                      </div>
+                      <div class="document-line document-line--short"></div>
+                      <div class="document-line"></div>
+                      <span class="page-number">P2</span>
+                    </figure>
+                    <button class="boundary-button split-button" type="button">分割</button>
+                    <figure class="document-page receipt-page">
+                      <div class="receipt-head">ご利用票兼領収書</div>
+                      <div class="document-meta">2025年7月25日</div>
+                      <div class="document-party">東日本旅客鉄道株式会社</div>
+                      <div class="document-line"></div>
+                      <div class="document-line"></div>
+                      <div class="receipt-box">
+                        <span>金額</span><strong>¥10,670</strong>
+                      </div>
+                      <div class="document-line document-line--short"></div>
+                      <div class="document-line"></div>
+                      <span class="page-number">P3</span>
+                    </figure>
+                  </div>
+                </article>
+
+                <button class="boundary-button merge-button" type="button">結合</button>
+
+                <article class="result-group result-group--warning">
+                  <div class="result-group-header">
+                    <span class="group-number">3</span>
+                    <input
+                      class="result-filename"
+                      type="text"
+                      value="mescius_20250728_株式会社A_120000.pdf"
+                      aria-label="分割後ファイル名"
+                    />
+                    <span class="group-status group-status--warning">要確認</span>
+                  </div>
+                  <div class="result-group-meta">
+                    <span>P4-P5</span>
+                    <span>2ページ</span>
+                  </div>
+                  <div class="page-sequence">
+                    <figure class="document-page invoice-page">
+                      <div class="document-title">請 求 書</div>
+                      <div class="document-meta">2025年7月28日</div>
+                      <div class="document-party">株式会社A 御中</div>
+                      <div class="document-line document-line--short"></div>
+                      <div class="document-line"></div>
+                      <div class="document-table">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="document-total">合計 ¥120,000</div>
+                      <span class="page-number">P4</span>
+                    </figure>
+                    <button class="boundary-button split-button" type="button">分割</button>
+                    <figure class="document-page invoice-page">
+                      <div class="document-title">請 求 書</div>
+                      <div class="document-meta">2025年7月28日</div>
+                      <div class="document-party">株式会社A 御中</div>
+                      <div class="document-line document-line--short"></div>
+                      <div class="document-line"></div>
+                      <div class="document-table">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="document-total">合計 ¥120,000</div>
+                      <span class="page-number">P5</span>
+                    </figure>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <footer class="modal-footer preview-footer">
+          <button id="confirm-preview" class="preview-confirm-button" type="button">
+            この内容でアップロード
+          </button>
+          <button id="cancel-preview" class="cancel-button" type="button">キャンセル</button>
+        </footer>
+      </section>
+    </main>
+
+    <script>
+      const returnToUpload = () => {
+        window.location.href = "./index.html?demo=files";
+      };
+      document.querySelector("#close-preview").addEventListener("click", returnToUpload);
+      document.querySelector("#cancel-preview").addEventListener("click", returnToUpload);
+      document.querySelector("#confirm-preview").addEventListener("click", returnToUpload);
+    </script>
+  </body>
+</html>
