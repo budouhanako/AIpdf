@@ -276,7 +276,7 @@ function invalidateSplit() {
   activeSourceId = null;
   splitState = selectedFiles.length ? "stale" : "idle";
   splitSpinner.hidden = true;
-  splitButtonLabel.textContent = "AIで分割";
+  splitButtonLabel.textContent = "AIで分割する";
   if (selectedFiles.length) {
     setSplitStatus("stale", "添付ファイルが変更されました。再分割してください。");
   } else {
@@ -299,7 +299,7 @@ function completeSplit() {
   savedSources = clone(splitSources);
   splitState = "ready";
   splitSpinner.hidden = true;
-  splitButtonLabel.textContent = "AIで分割";
+  splitButtonLabel.textContent = "AIで分割する";
   const total = getTotalGroupCount(splitSources);
   setSplitStatus("ready", `${selectedFiles.length}個のファイルを${total}個に分割しました`);
   renderSelectedFiles();
